@@ -20,11 +20,11 @@ func RegisterBookController() *BookController {
 
 
 func (c *BookController) Index(ctx *fiber.Ctx) error {
-	books := c.bookService.GetAllBooks()
+	pagination := utils.BuildPaginationParams(ctx)
 
-	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{
-		"data": books,
-	})
+	response := c.bookService.GetAllBooks(&pagination)
+
+	return ctx.Status(fiber.StatusOK).JSON(response)
 }
 
 func (c *BookController) Show(ctx *fiber.Ctx) error {

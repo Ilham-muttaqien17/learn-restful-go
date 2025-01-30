@@ -1,18 +1,44 @@
 package services
 
 import (
+	"math"
+
 	"github.com/Ilham-muttaqien17/learn-restful-go/dto"
 	"github.com/Ilham-muttaqien17/learn-restful-go/models"
+	"github.com/Ilham-muttaqien17/learn-restful-go/utils"
+	"gorm.io/gorm/clause"
 )
 
 type BookService struct{}
 
-func (c *BookService) GetAllBooks() []models.Book {
+
+func (c *BookService) GetAllBooks(query *utils.PaginationParams) utils.PaginationResponse[[]models.Book] {
 	var books []models.Book
+	var totalBooks int64
 
-	models.DB.Find(&books)
+	models.DB.Model(&models.Book{}).Count(&totalBooks)
 
-	return books
+	models.DB.Offset(int(query.Offset)).Limit(int(query.Limit)).Order(clause.OrderByColumn{
+		Column: clause.Column{Name: query.SortBy}, Desc: query.IsDesc,
+	}).Find(&books)
+
+	data := utils.ToSlice[models.Book](&books, true)
+	// Return empty array/slice instead of null
+	if data == nil {
+		data = []models.Book{}
+	}
+
+	totalPages := int64(math.Ceil(float64(totalBooks) / float64(query.Limit)))
+
+	return utils.PaginationResponse[[]models.Book]{
+		Data: data,
+		Meta: &utils.MetaPagination{
+			Limit: query.Limit,
+			Page: query.Page,
+			TotalData: totalBooks,
+			TotalPage: totalPages,
+		},
+	}
 }
 
 func (c *BookService) GetDetailBook(id string) (models.Book, error) {

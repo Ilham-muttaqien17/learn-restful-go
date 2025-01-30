@@ -29,7 +29,7 @@ func ParseValidationError(err error, model interface{}) map[string][]string {
 
 	if validationErrors, ok := err.(validator.ValidationErrors); ok {
 		for _, fieldError := range validationErrors {
-			fieldName := getJSONFieldName(model, fieldError.StructField())
+			fieldName := GetJSONFieldName(model, fieldError.StructField())
 			message := parseValidationErrorMessage(fieldError, fieldName)
 
 			errors[fieldName] = append(errors[fieldName], message)
