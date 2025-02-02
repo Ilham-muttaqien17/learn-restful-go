@@ -14,6 +14,12 @@ import (
 )
 
 func main() {
+	// Load env file
+	if err := config.LoadEnv(); err != nil {
+		fmt.Println("❌ Error loading env file: ", err)
+		os.Exit(1)
+	}
+
 	// Initialize redis connection
 	if err := config.RegisterRedis(); err != nil {
 		fmt.Println("❌ Error connecting redis storage: ", err)
@@ -49,9 +55,11 @@ func main() {
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 
+	address := fmt.Sprintf("%s:%d", config.Env.AppHost, config.Env.AppPort)
+
 	// Start the server in a goroutine
 	go func() {
-		if err := app.Listen(":3300"); err != nil {
+		if err := app.Listen(address); err != nil {
 			fmt.Println("❌ Error starting server: ", err)
 			os.Exit(1)
 		}

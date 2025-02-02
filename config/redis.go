@@ -17,10 +17,10 @@ func RegisterRedis() error {
 	}
 
 	store := redis.New(redis.Config{
-		Host: "127.0.0.1",
-		Port: 6379,
-		Username: "",
-		Password: "",
+		Host: Env.RedisHost,
+		Port: Env.RedisPort,
+		Username: Env.RedisUsername,
+		Password: Env.RedisPassword,
 		Database: 0,
 		TLSConfig: nil,
 		PoolSize: 10 * runtime.GOMAXPROCS(0),
