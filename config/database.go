@@ -1,6 +1,7 @@
-package models
+package config
 
 import (
+	"github.com/Ilham-muttaqien17/learn-restful-go/models"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -15,7 +16,7 @@ func ConnectDB() error {
 		return err
 	}
 
-	db.AutoMigrate(&Book{})
+	db.AutoMigrate(&models.Book{})
 
 	DB = db
 
@@ -32,4 +33,3 @@ func DisconnectDB() error {
 	conn.Close()
 	return nil
 }
-

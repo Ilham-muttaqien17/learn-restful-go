@@ -3,6 +3,7 @@ package services
 import (
 	"math"
 
+	"github.com/Ilham-muttaqien17/learn-restful-go/config"
 	"github.com/Ilham-muttaqien17/learn-restful-go/dto"
 	"github.com/Ilham-muttaqien17/learn-restful-go/models"
 	"github.com/Ilham-muttaqien17/learn-restful-go/utils"
@@ -16,9 +17,9 @@ func (c *BookService) GetAllBooks(query *utils.PaginationParams) utils.Paginatio
 	var books []models.Book
 	var totalBooks int64
 
-	models.DB.Model(&models.Book{}).Count(&totalBooks)
+	config.DB.Model(&models.Book{}).Count(&totalBooks)
 
-	models.DB.Offset(int(query.Offset)).Limit(int(query.Limit)).Order(clause.OrderByColumn{
+	config.DB.Offset(int(query.Offset)).Limit(int(query.Limit)).Order(clause.OrderByColumn{
 		Column: clause.Column{Name: query.SortBy}, Desc: query.IsDesc,
 	}).Find(&books)
 
@@ -45,7 +46,7 @@ func (c *BookService) GetDetailBook(id string) (models.Book, error) {
 
 	var book models.Book;
 
-	if err := models.DB.First(&book, id).Error; err != nil {
+	if err := config.DB.First(&book, id).Error; err != nil {
 		return book, err
 	}
 
@@ -66,7 +67,7 @@ func (c *BookService) CreateBook(bookDTO dto.BookDTO) (models.Book, error) {
 	}
 
 
-	if err := models.DB.Create(&savedBook).Error; err != nil {
+	if err := config.DB.Create(&savedBook).Error; err != nil {
 		return savedBook, err
 	}
 
@@ -76,7 +77,7 @@ func (c *BookService) CreateBook(bookDTO dto.BookDTO) (models.Book, error) {
 func (c *BookService) UpdateBook(bookDTO dto.BookDTO, id string) (models.Book, error) {
 	var savedBook models.Book
 
-	if err := models.DB.First(&savedBook, id).Error; err != nil {
+	if err := config.DB.First(&savedBook, id).Error; err != nil {
 		return savedBook, err
 	}
 
@@ -90,7 +91,7 @@ func (c *BookService) UpdateBook(bookDTO dto.BookDTO, id string) (models.Book, e
 		Weight: bookDTO.Detail.Weight,
 	}
 
-	if err := models.DB.Save(&savedBook).Error; err != nil {
+	if err := config.DB.Save(&savedBook).Error; err != nil {
 		return savedBook, err
 	}
 
@@ -100,11 +101,11 @@ func (c *BookService) UpdateBook(bookDTO dto.BookDTO, id string) (models.Book, e
 func (c *BookService) DeleteBook(id string) error {
 	var book models.Book;
 
-	if err := models.DB.First(&book, id).Error; err != nil {
+	if err := config.DB.First(&book, id).Error; err != nil {
 		return err
 	}
 
-	if err := models.DB.Delete(&book).Error; err != nil {
+	if err := config.DB.Delete(&book).Error; err != nil {
 		return err
 	}
 
