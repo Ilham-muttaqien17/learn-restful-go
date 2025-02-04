@@ -37,7 +37,20 @@ func main() {
 	fmt.Println("✅ Database connection opened")
 
 	// Initialize Fiber app
-	app := fiber.New()
+	app := fiber.New(fiber.Config{
+		// Custom error handler
+		ErrorHandler: func(ctx *fiber.Ctx, err error) error {
+			if e, ok := err.(*fiber.Error); ok {
+				return ctx.Status(e.Code).JSON(fiber.Map{
+					"message": e.Message,
+				})
+			}
+
+			return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+				"message": "Internal server error",
+			})
+		},
+	})
 
 	// Register middlewares
 	middlewares.Register(app)
