@@ -33,15 +33,10 @@ func (c *BookController) Show(ctx *fiber.Ctx) error {
 	book, err := c.bookService.GetDetailBook(bookId)
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
-			return ctx.Status(fiber.StatusNotFound).JSON(map[string]interface{}{
-				"message": "Data not found",
-				"data": nil,
-			})
+			return fiber.NewError(fiber.StatusNotFound, "Data not found")
 		}
 
-		return ctx.Status(fiber.StatusInternalServerError).JSON(map[string]interface{}{
-			"error": err.Error(),
-		})
+		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
 
 	return ctx.Status(fiber.StatusOK).JSON(map[string]interface{}{
@@ -103,15 +98,10 @@ func (c *BookController) Update(ctx *fiber.Ctx) error {
 	savedBook, err := c.bookService.UpdateBook(parsedBook, bookId)
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
-			return ctx.Status(fiber.StatusNotFound).JSON(map[string]interface{}{
-				"message": "Data not found",
-				"data": nil,
-			})
+			return fiber.NewError(fiber.StatusNotFound, "Data not found")
 		}
 
-		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"message": err.Error(),
-		})
+		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
 
 	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{
@@ -125,15 +115,10 @@ func (c *BookController) Destroy(ctx *fiber.Ctx) error {
 
 	if err := c.bookService.DeleteBook(bookId); err != nil {
 		if err == gorm.ErrRecordNotFound {
-			return ctx.Status(fiber.StatusNotFound).JSON(map[string]interface{}{
-				"message": "Data not found",
-				"data": nil,
-			})
+			return fiber.NewError(fiber.StatusNotFound, "Data not found")
 		}
 
-		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"message": err.Error(),
-		})
+		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
 
 	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{

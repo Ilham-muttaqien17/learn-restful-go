@@ -40,15 +40,18 @@ func main() {
 	app := fiber.New(fiber.Config{
 		// Custom error handler
 		ErrorHandler: func(ctx *fiber.Ctx, err error) error {
-			if e, ok := err.(*fiber.Error); ok {
-				return ctx.Status(e.Code).JSON(fiber.Map{
-					"message": e.Message,
+			e, ok := err.(*fiber.Error)
+			if !ok || e.Code == fiber.StatusInternalServerError {
+				return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+					"message": "Internal server error",
 				})
 			}
 
-			return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-				"message": "Internal server error",
+			return ctx.Status(e.Code).JSON(fiber.Map{
+				"message": e.Message,
 			})
+			
+
 		},
 	})
 
