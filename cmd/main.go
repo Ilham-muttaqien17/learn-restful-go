@@ -83,6 +83,10 @@ func main() {
 
 	// Block until we receive a termination signal
 	<-quit
+
+	// Close channel after main function execution completed
+	defer close(quit)
+
 	fmt.Println("⌚ Shutting down gracefully...")
 
 	if err := app.Shutdown(); err != nil {
