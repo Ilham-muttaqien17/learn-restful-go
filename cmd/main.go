@@ -10,7 +10,9 @@ import (
 	"github.com/Ilham-muttaqien17/learn-restful-go/config"
 	"github.com/Ilham-muttaqien17/learn-restful-go/middlewares"
 	"github.com/Ilham-muttaqien17/learn-restful-go/routes"
+	"github.com/Ilham-muttaqien17/learn-restful-go/utils"
 	"github.com/gofiber/fiber/v2"
+	"go.uber.org/zap"
 )
 
 func main() {
@@ -36,11 +38,27 @@ func main() {
 
 	fmt.Println("✅ Database connection opened")
 
+	fmt.Println("✅ Running on mode:", config.Env.GoEnv )
+
+	// Initialize logger
+	logger := utils.NewLogger()
+
 	// Initialize Fiber app
 	app := fiber.New(fiber.Config{
 		// Custom error handler
 		ErrorHandler: func(ctx *fiber.Ctx, err error) error {
 			e, ok := err.(*fiber.Error)
+			resource := map[string]interface{}{
+				"path": ctx.Path(),
+				"method": ctx.Method(),
+				"statusCode": e.Code,
+				"ua": ctx.Get("user-agent"),
+				"ip": ctx.IP(),
+				"requestTime": ctx.Context().Time(),
+				"requestId": ctx.Locals("requestId"),
+			}
+			logger.Error(err.Error(), zap.Any("resource", resource), zap.Stack("stack"))
+
 			if !ok || e.Code == fiber.StatusInternalServerError {
 				return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 					"message": "Internal server error",
