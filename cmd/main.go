@@ -27,7 +27,7 @@ func main() {
 		fmt.Println("❌ Error connecting redis storage: ", err)
 		os.Exit(1)
 	}
-	
+
 	fmt.Println("✅ Redis connection established")
 
 	// Initialize database connection
@@ -38,7 +38,7 @@ func main() {
 
 	fmt.Println("✅ Database connection opened")
 
-	fmt.Println("✅ Running on mode:", config.Env.GoEnv )
+	fmt.Println("✅ Running on mode:", config.Env.GoEnv)
 
 	// Initialize logger
 	logger := utils.NewLogger()
@@ -49,13 +49,13 @@ func main() {
 		ErrorHandler: func(ctx *fiber.Ctx, err error) error {
 			e, ok := err.(*fiber.Error)
 			resource := map[string]interface{}{
-				"path": ctx.Path(),
-				"method": ctx.Method(),
-				"statusCode": e.Code,
-				"ua": ctx.Get("user-agent"),
-				"ip": ctx.IP(),
+				"path":        ctx.Path(),
+				"method":      ctx.Method(),
+				"statusCode":  e.Code,
+				"ua":          ctx.Get("user-agent"),
+				"ip":          ctx.IP(),
 				"requestTime": ctx.Context().Time(),
-				"requestId": ctx.Locals("requestId"),
+				"requestId":   ctx.Locals("requestId"),
 			}
 			logger.Error(err.Error(), zap.Any("resource", resource), zap.Stack("stack"))
 
@@ -68,7 +68,6 @@ func main() {
 			return ctx.Status(e.Code).JSON(fiber.Map{
 				"message": e.Message,
 			})
-			
 
 		},
 	})
@@ -80,9 +79,9 @@ func main() {
 	routes.Register(app)
 
 	// Handle Unmatched Routes
-	app.Use("*", func (ctx *fiber.Ctx) error  {
+	app.Use("*", func(ctx *fiber.Ctx) error {
 		return ctx.Status(fiber.StatusNotFound).JSON(map[string]interface{}{
-			"message": fmt.Sprintf("Route %s:%s not found", ctx.Method(),ctx.Path()),
+			"message": fmt.Sprintf("Route %s:%s not found", ctx.Method(), ctx.Path()),
 		})
 	})
 

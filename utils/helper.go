@@ -15,7 +15,7 @@ func GetJSONFieldName(model interface{}, structField string) string {
 	}
 
 	if field, found := modelType.FieldByName(structField); found {
-		jsonTag := field.Tag.Get("json")	
+		jsonTag := field.Tag.Get("json")
 
 		if jsonTag != "" && jsonTag != "-" {
 			return strings.ToLower(string(jsonTag))
@@ -64,8 +64,8 @@ func ToSlice[T any](s any, isAssign bool) []T {
 		if slice, ok := s.([]T); ok {
 			return slice
 		}
-	} 
-	
+	}
+
 	// Case 2: If s is a pointer of slice
 	if reflect.TypeOf(s).Kind() == reflect.Pointer && reflect.TypeOf(s).Elem().Kind() == reflect.Slice {
 		v := reflect.ValueOf(s).Elem()
@@ -81,7 +81,6 @@ func ToSlice[T any](s any, isAssign bool) []T {
 	if isAssign {
 		return make([]T, 0)
 	}
- 
+
 	return nil
 }
-

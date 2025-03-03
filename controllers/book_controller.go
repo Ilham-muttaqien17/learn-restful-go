@@ -18,7 +18,6 @@ func RegisterBookController() *BookController {
 	}
 }
 
-
 func (c *BookController) Index(ctx *fiber.Ctx) error {
 	pagination := utils.BuildPaginationParams(ctx)
 
@@ -46,7 +45,7 @@ func (c *BookController) Show(ctx *fiber.Ctx) error {
 
 func (c *BookController) Create(ctx *fiber.Ctx) error {
 	var bookDTO dto.BookDTO
-	
+
 	// Parse data from request body
 	if err := ctx.BodyParser(&bookDTO); err != nil {
 		return ctx.Status(fiber.StatusUnprocessableEntity).JSON(fiber.Map{
@@ -55,9 +54,9 @@ func (c *BookController) Create(ctx *fiber.Ctx) error {
 	}
 
 	// Validate request
-	parsedBook, errValidation := utils.Validator(bookDTO);
-	if  errValidation != nil {
-		return ctx.Status(fiber.StatusUnprocessableEntity).JSON(map[string]interface{} {
+	parsedBook, errValidation := utils.Validator(bookDTO)
+	if errValidation != nil {
+		return ctx.Status(fiber.StatusUnprocessableEntity).JSON(map[string]interface{}{
 			"errors": errValidation,
 		})
 	}
@@ -72,7 +71,7 @@ func (c *BookController) Create(ctx *fiber.Ctx) error {
 
 	return ctx.Status(fiber.StatusCreated).JSON(fiber.Map{
 		"message": "Book created succesfully",
-		"data": savedBook,
+		"data":    savedBook,
 	})
 }
 
@@ -88,9 +87,9 @@ func (c *BookController) Update(ctx *fiber.Ctx) error {
 	}
 
 	// Validate request
-	parsedBook, errValidation := utils.Validator(bookDTO);
-	if  errValidation != nil {
-		return ctx.Status(fiber.StatusUnprocessableEntity).JSON(map[string]interface{} {
+	parsedBook, errValidation := utils.Validator(bookDTO)
+	if errValidation != nil {
+		return ctx.Status(fiber.StatusUnprocessableEntity).JSON(map[string]interface{}{
 			"errors": errValidation,
 		})
 	}
@@ -106,7 +105,7 @@ func (c *BookController) Update(ctx *fiber.Ctx) error {
 
 	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{
 		"message": "Book updated succesfully",
-		"data": savedBook,
+		"data":    savedBook,
 	})
 }
 

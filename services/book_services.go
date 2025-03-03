@@ -12,7 +12,6 @@ import (
 
 type BookService struct{}
 
-
 func (c *BookService) GetAllBooks(query *utils.PaginationParams) utils.PaginationResponse[[]models.Book] {
 	var books []models.Book
 	var totalBooks int64
@@ -34,8 +33,8 @@ func (c *BookService) GetAllBooks(query *utils.PaginationParams) utils.Paginatio
 	return utils.PaginationResponse[[]models.Book]{
 		Data: data,
 		Meta: &utils.MetaPagination{
-			Limit: query.Limit,
-			Page: query.Page,
+			Limit:     query.Limit,
+			Page:      query.Page,
 			TotalData: totalBooks,
 			TotalPage: totalPages,
 		},
@@ -44,7 +43,7 @@ func (c *BookService) GetAllBooks(query *utils.PaginationParams) utils.Paginatio
 
 func (c *BookService) GetDetailBook(id string) (models.Book, error) {
 
-	var book models.Book;
+	var book models.Book
 
 	if err := config.DB.First(&book, id).Error; err != nil {
 		return book, err
@@ -62,10 +61,9 @@ func (c *BookService) CreateBook(bookDTO dto.BookDTO) (models.Book, error) {
 	savedBook.PublishDate = bookDTO.PublishDate
 	savedBook.Tags = bookDTO.Tags
 	savedBook.Detail = &models.Detail{
-		Price: bookDTO.Detail.Price,
+		Price:  bookDTO.Detail.Price,
 		Weight: bookDTO.Detail.Weight,
 	}
-
 
 	if err := config.DB.Create(&savedBook).Error; err != nil {
 		return savedBook, err
@@ -87,7 +85,7 @@ func (c *BookService) UpdateBook(bookDTO dto.BookDTO, id string) (models.Book, e
 	savedBook.PublishDate = bookDTO.PublishDate
 	savedBook.Tags = bookDTO.Tags
 	savedBook.Detail = &models.Detail{
-		Price: bookDTO.Detail.Price, 
+		Price:  bookDTO.Detail.Price,
 		Weight: bookDTO.Detail.Weight,
 	}
 
@@ -99,7 +97,7 @@ func (c *BookService) UpdateBook(bookDTO dto.BookDTO, id string) (models.Book, e
 }
 
 func (c *BookService) DeleteBook(id string) error {
-	var book models.Book;
+	var book models.Book
 
 	if err := config.DB.First(&book, id).Error; err != nil {
 		return err

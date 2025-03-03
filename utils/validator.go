@@ -6,10 +6,9 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-
 type ValidationErrorResponse struct {
-	Message string `json:"message"`;
-	Errors map[string]string `json:"errors"`
+	Message string            `json:"message"`
+	Errors  map[string]string `json:"errors"`
 }
 
 func Validator[T interface{}](model T) (T, map[string][]string) {
@@ -18,7 +17,7 @@ func Validator[T interface{}](model T) (T, map[string][]string) {
 	if err := validate.Struct(model); err != nil {
 		errorMessages := ParseValidationError(err, model)
 
-		return model, errorMessages 
+		return model, errorMessages
 	}
 
 	return model, nil
@@ -49,7 +48,7 @@ func parseValidationErrorMessage(err validator.FieldError, field string) string 
 	case "min":
 		return fmt.Sprintf("The %s value is too low", field)
 	case "max":
-		return  fmt.Sprintf("The %s value is too long", field)
+		return fmt.Sprintf("The %s value is too long", field)
 	default:
 		return "Invalid value"
 	}

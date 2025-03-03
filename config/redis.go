@@ -7,8 +7,7 @@ import (
 	"github.com/gofiber/storage/redis/v3"
 )
 
-var RedisStore *redis.Storage 
-
+var RedisStore *redis.Storage
 
 func RegisterRedis() error {
 
@@ -17,13 +16,13 @@ func RegisterRedis() error {
 	}
 
 	store := redis.New(redis.Config{
-		Host: Env.RedisHost,
-		Port: Env.RedisPort,
-		Username: Env.RedisUsername,
-		Password: Env.RedisPassword,
-		Database: 0,
+		Host:      Env.RedisHost,
+		Port:      Env.RedisPort,
+		Username:  Env.RedisUsername,
+		Password:  Env.RedisPassword,
+		Database:  0,
 		TLSConfig: nil,
-		PoolSize: 10 * runtime.GOMAXPROCS(0),
+		PoolSize:  10 * runtime.GOMAXPROCS(0),
 	})
 
 	if store == nil {

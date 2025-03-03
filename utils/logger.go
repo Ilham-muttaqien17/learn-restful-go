@@ -30,12 +30,12 @@ func NewLogger() *zap.Logger {
 
 	// Define encoder config
 	encoderConfig := zapcore.EncoderConfig{
-		TimeKey: "timestamp",
-		LevelKey: "level",
-		MessageKey: "message",
-		CallerKey: "caller",
-		EncodeTime: zapcore.ISO8601TimeEncoder,
-		EncodeLevel: zapcore.CapitalLevelEncoder,
+		TimeKey:      "timestamp",
+		LevelKey:     "level",
+		MessageKey:   "message",
+		CallerKey:    "caller",
+		EncodeTime:   zapcore.ISO8601TimeEncoder,
+		EncodeLevel:  zapcore.CapitalLevelEncoder,
 		EncodeCaller: zapcore.ShortCallerEncoder,
 	}
 
@@ -60,11 +60,11 @@ func NewLogger() *zap.Logger {
 		// Create lumberjack logger for file rotation
 		logFileName := fmt.Sprintf("logs/error_%s.log", time.Now().Format("2006-01-02"))
 		fileLogger := &lumberjack.Logger{
-			Filename: logFileName,
-			MaxSize: 10,
-			MaxAge: 30,
+			Filename:   logFileName,
+			MaxSize:    10,
+			MaxAge:     30,
 			MaxBackups: 5,
-			Compress: true,
+			Compress:   true,
 		}
 
 		// Create core for file

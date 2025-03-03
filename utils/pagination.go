@@ -5,30 +5,30 @@ import (
 )
 
 type PaginationParams struct {
-	Limit int `json:"limit"`
-	Page int `json:"page"`
-	Offset int `json:"offset"`
-	SortBy string `json:"sort_by"`
+	Limit         int    `json:"limit"`
+	Page          int    `json:"page"`
+	Offset        int    `json:"offset"`
+	SortBy        string `json:"sort_by"`
 	SortDirection string `json:"sort_dir"`
-	IsDesc bool
+	IsDesc        bool
 }
 
 type MetaPagination struct {
-	Limit int `json:"limit"`
-	Page int `json:"page"`
+	Limit     int   `json:"limit"`
+	Page      int   `json:"page"`
 	TotalData int64 `json:"total_data"`
 	TotalPage int64 `json:"total_page"`
 }
 
 type PaginationResponse[T interface{}] struct {
-	Data T `json:"data"`
+	Data T               `json:"data"`
 	Meta *MetaPagination `json:"meta"`
 }
 
 type SortOrder string
 
 const (
-	Asc SortOrder = "asc"
+	Asc  SortOrder = "asc"
 	Desc SortOrder = "desc"
 )
 
@@ -46,11 +46,11 @@ func BuildPaginationParams(ctx *fiber.Ctx) PaginationParams {
 	}
 
 	return PaginationParams{
-		Limit: limit,
-		Page: page,
-		Offset: offset,
-		SortBy: sortBy,
+		Limit:         limit,
+		Page:          page,
+		Offset:        offset,
+		SortBy:        sortBy,
 		SortDirection: sortDirection,
-		IsDesc: sortDirection == "desc",
+		IsDesc:        sortDirection == "desc",
 	}
 }

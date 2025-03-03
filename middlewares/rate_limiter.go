@@ -10,7 +10,7 @@ import (
 
 func RateLimiter(ctx *fiber.Ctx) error {
 	rateLimiter := limiter.New(limiter.Config{
-		Max: 60,
+		Max:        60,
 		Expiration: time.Minute,
 		KeyGenerator: func(c *fiber.Ctx) string {
 			return "limiter-" + c.IP()

@@ -9,9 +9,8 @@ import (
 func RequestId(ctx *fiber.Ctx) error {
 	requestId := requestid.New(requestid.Config{
 		ContextKey: "requestId",
-		Header: "X-Request-Id",
-		Generator: utils.UUIDv4,
-		
+		Header:     "X-Request-Id",
+		Generator:  utils.UUIDv4,
 	})
 
 	return requestId(ctx)
